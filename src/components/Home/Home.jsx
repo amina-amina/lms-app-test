@@ -92,19 +92,32 @@ class Home extends React.Component {
                 nom:nvStudent.nom,
                 pren:nvStudent.pren,
                 email:nvStudent.email,
-                avatar:nvStudent.avatar
+                avatar:nvStudent.avatar,
+                ispresent:nvStudent.isPresent
 
             }
             axios.post("students.json", data_student).then((response)=>{
                 //console.log(response.data)
-                let id_new_student = response.data.name
-                const myNewStudent ={
+                let id_new_student = response.data.name;
+                //chercher l'etudiant qui a l'id ==0 sur la liste
+                let newListeStudent = this.state.list_student_data;
+                newListeStudent.forEach(s=>{
+                    if(s.id ==0){
+                        s.id=id_new_student
+                    }
+                   // console.log(s)
+                    
+                })
+
+               
+
+              /*  const myNewStudent ={
                     nom:nvStudent.nom,
                     pren:nvStudent.pren,
                     email:nvStudent.email,
                     avatar:nvStudent.avatar,
                     id:id_new_student
-                }
+                }*/
                 //console.log(myNewStudent)
                 //console.log(id_new_student)
 
@@ -122,6 +135,35 @@ class Home extends React.Component {
 
         //  console.log(nvStudent)
     };
+    // recuperer la liste ds etudiants firebase onload page
+    componentDidMount(){
+        axios.get("students.json").then((reponse)=>{
+           // console.log(reponse)
+           //extraire toutes les clés de l'objet data
+           let keys = Object.keys(reponse.data)
+           //parcourir les keys
+           let listEtudiant = keys.map(k=>{
+             let n = new StudentModel(
+                 k,
+                reponse.data[k].nom,
+                reponse.data[k].pren,
+                reponse.data[k].email,
+                reponse.data[k].avatar,
+                reponse.data[k].isPresent
+                );
+                //creer la nouvelle liste des etudiants
+                return n;
+
+               //affichage de l'objet data
+               //console.log(k,reponse.data[k].email)
+           })
+           //ajouter la liste au state
+           this.setState({list_student_data:listEtudiant})
+           //console.log(listEtudiant)
+
+
+        })
+    }
 
 
 }
