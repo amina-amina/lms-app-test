@@ -67,6 +67,7 @@ class Home extends React.Component {
             alert("veuillez remplir les champs de formulaire")
         } else {
             let nvStudent = new StudentModel(
+                0,
                 this.state.nom,
                 this.state.pren,
                 this.state.email,
@@ -87,9 +88,30 @@ class Home extends React.Component {
             newStudentList.push(nvStudent)
             this.setState({ list_student_data: newStudentList })
             //ajouter etudiant a la partie serveur en utilisant axios
-            axios.post("students.json", nvStudent)
+            const data_student={
+                nom:nvStudent.nom,
+                pren:nvStudent.pren,
+                email:nvStudent.email,
+                avatar:nvStudent.avatar
 
+            }
+            axios.post("students.json", data_student).then((response)=>{
+                //console.log(response.data)
+                let id_new_student = response.data.name
+                const myNewStudent ={
+                    nom:nvStudent.nom,
+                    pren:nvStudent.pren,
+                    email:nvStudent.email,
+                    avatar:nvStudent.avatar,
+                    id:id_new_student
+                }
+                //console.log(myNewStudent)
+                //console.log(id_new_student)
+
+            })
+            
         }
+
 
 
         //recuperer les infos
