@@ -39,9 +39,7 @@ export default function Newstudent(props) {
                             placeholder="Url Avatar"
                             type="text"
                             className="form-control"
-                            onChange ={props.changeInput
-                            
-                            }
+                            onChange ={props.changeInput}
                         />
                     </div>
                     <div className="text-center">
