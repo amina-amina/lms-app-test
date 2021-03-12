@@ -35,9 +35,12 @@ class Home extends React.Component {
                     <Newstudent
                         handleSubmit={this.addStudent}
                         changeInput={this.changeInput}
+                        avatar={this.state.avatar}
 
                     />
-                    <Liststudent dataList={this.state.list_student_data} />
+                    <Liststudent dataList={this.state.list_student_data}
+                                 handleDeleteStudent={this.deleteStudent}
+                    />
 
 
 
@@ -108,6 +111,7 @@ class Home extends React.Component {
                    // console.log(s)
                     
                 })
+                this.setState({list_student_data:newListeStudent})
 
                
 
@@ -138,6 +142,7 @@ class Home extends React.Component {
     // recuperer la liste ds etudiants firebase onload page
     componentDidMount(){
         axios.get("students.json").then((reponse)=>{
+            if(reponse.data!=null){
            // console.log(reponse)
            //extraire toutes les clés de l'objet data
            let keys = Object.keys(reponse.data)
@@ -159,10 +164,27 @@ class Home extends React.Component {
            })
            //ajouter la liste au state
            this.setState({list_student_data:listEtudiant})
+        }
            //console.log(listEtudiant)
 
 
         })
+    }
+    deleteStudent = (idStudent)=>{
+        let choice = window.confirm("Are you sure?")
+        if (choice == true){        
+            axios.delete("students/"+idStudent+".json").then((response)=>{
+            //let newList = this.state.list_student_data;
+           // newList=newList.filter(s=>s.id !== idStudent)
+           let newList = this.state.list_student_data.filter(
+            (s)=>s.id !== idStudent
+
+           );
+            this.setState({list_student_data:newList})
+        })
+    }
+   
+       // alert ("delete student")
     }
 
 
