@@ -6,11 +6,11 @@ export default function Newstudent(props) {
             <div className="col-4 border p-5">
                 <div className="avatar border mx-auto mt-5 " 
                     style ={{backgroundImage:`url(${props.avatar||'https://i.stack.imgur.com/l60Hf.png'})`}}
-                
                 />
-                <form onSubmit={props.handleSubmit} autoComplete="off">
+                <form onSubmit={props.action =="ADD" ? props.handleAddSubmit : props.handleEditSubmit} autoComplete="off">
                     <div className="mb-4 mt-4 w-70 mx-auto">
                         <input
+                         value={props.nom}
                             name = "nom"
                             placeholder="Firstname"
                             type="text"
@@ -20,6 +20,7 @@ export default function Newstudent(props) {
                     </div>
                     <div className="mb-4 mt-4 w-70 mx-auto">
                         <input
+                        value={props.pren}
                         name="pren"
                             placeholder="Lastname"
                             type="text"
@@ -29,6 +30,7 @@ export default function Newstudent(props) {
                     </div>
                     <div className="mb-4 mt-4 w-70 mx-auto">
                         <input
+                         value={props.email}
                         name="email"
                             placeholder="Email address"
                             type="email"
@@ -38,6 +40,7 @@ export default function Newstudent(props) {
                     </div>
                     <div className="mb-4 mt-4 w-70 mx-auto">
                         <input
+                         value={props.avatar}
                         name="avatar"
                             placeholder="Url Avatar"
                             type="text"
@@ -47,7 +50,7 @@ export default function Newstudent(props) {
                     </div>
                     <div className="text-center">
                         <button type="submit" className="btn btn-warning">
-                            Add Student <i className="fas fa-plus-circle" />
+                           <i className={props.iconBtn} /> {props.textBtn} 
                         </button>
                     </div>
                 </form>

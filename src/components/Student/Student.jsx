@@ -15,6 +15,7 @@ export default function Student(props) {
             width={150}
             onLoad={()=>{setloading(false)}}
           />
+
           <div className={loading==true ? "border border-white p-5":"d-none"}>
          <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden"></span>
@@ -25,7 +26,7 @@ export default function Student(props) {
             <button className="mz-1 btn btn-info m-1">
               <i className="fas fa-eye" />
             </button>
-            <button className="mz-1 btn btn-warning m-1">
+            <button onClick={()=>props.handleEdit(props.data)}   className="mz-1 btn btn-warning m-1">
               <i className="fas fa-edit" />
             </button>
             <button onClick={()=>props.handleDelete(props.data.id)} className="mz-1 btn btn-danger m-1">
