@@ -7,7 +7,8 @@ export default function Liststudent(props) {
     return (
 
         <div className="h-75 col-8 border p-5 overflow-scroll ">
-            <input
+            <input onKeyUp={props.handlesearch}
+           // value={props.myinput}
                 type="text"
                 className="w-50 form-control mx-auto"
                 placeholder="Filter students by firstname or lastname"
@@ -20,6 +21,9 @@ export default function Liststudent(props) {
                 key={s.id} 
                 data={s}
                 handleDelete={props.handleDeleteStudent}
+                handleEdit={props.handleEditStudent}
+                
+
 
              />)
 

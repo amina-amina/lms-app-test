@@ -1,6 +1,6 @@
 import Liststudent from '../Student/Liststudent';
 import './Home.css';
-import Newstudent from '../Student/Newstudent';
+import Formstudent from '../Student/Newstudent';
 import React from 'react';
 import StudentModel from "../../models/Student-model"
 import axios from '../../utils/axios';
@@ -15,11 +15,12 @@ class Home extends React.Component {
             pren: "",
             email: "",
             avatar: "",
-            list_student_data: [
-
-
-
-            ]
+            updatedsdstudent_id:-1,
+            textBtnState:"addstudent",
+            iconBtnState:"fas fa-plus-circle",
+            action:"ADD",
+            backupList:[],
+            list_student_data: []
             //student:new StudentModel("amina","amina","aaa@gmail.com","https://i.imgur.com/1o1zEDM.png",true)
         };
         //console.log(this.state)
@@ -32,14 +33,28 @@ class Home extends React.Component {
             </h1>
 
                 <div className="container-fluid d-flex p-4">
-                    <Newstudent
-                        handleSubmit={this.addStudent}
-                        changeInput={this.changeInput}
+                    <Formstudent
+                        textBtn = {this.state.textBtnState}
+                        iconBtn = {this.state.iconBtnState}
                         avatar={this.state.avatar}
+                        nom={this.state.nom}
+                        pren={this.state.pren}
+                        email={this.state.email}
+                        action={this.state.action}
+
+                        handleAddSubmit={this.addStudent}
+                        handleEditSubmit={this.submitEditStudent}
+
+                        changeInput={this.changeInput}
+
 
                     />
                     <Liststudent dataList={this.state.list_student_data}
                                  handleDeleteStudent={this.deleteStudent}
+                                 handleEditStudent={this.EditStudent}
+                                 handlesearch={this.searchStudent}
+                                 
+                                 
                     />
 
 
@@ -61,7 +76,6 @@ class Home extends React.Component {
     }
     addStudent = (event) => {
         event.preventDefault();
-
         //vider les inputs de formulaire
         event.target.reset()
 
@@ -75,8 +89,6 @@ class Home extends React.Component {
                 this.state.pren,
                 this.state.email,
                 this.state.avatar,
-
-
                 false)
             //vider states
             this.setState({
@@ -155,7 +167,9 @@ class Home extends React.Component {
                 reponse.data[k].email,
                 reponse.data[k].avatar,
                 reponse.data[k].isPresent
+                
                 );
+                //console.log(k)
                 //creer la nouvelle liste des etudiants
                 return n;
 
@@ -164,6 +178,8 @@ class Home extends React.Component {
            })
            //ajouter la liste au state
            this.setState({list_student_data:listEtudiant})
+           //ajouter un backup
+           this.setState({backupList:listEtudiant})
         }
            //console.log(listEtudiant)
 
@@ -176,16 +192,105 @@ class Home extends React.Component {
             axios.delete("students/"+idStudent+".json").then((response)=>{
             //let newList = this.state.list_student_data;
            // newList=newList.filter(s=>s.id !== idStudent)
-           let newList = this.state.list_student_data.filter(
+           let newList = this.state.backupList.filter(
             (s)=>s.id !== idStudent
 
            );
             this.setState({list_student_data:newList})
+            //changer le backup
+            this.setState({backupList:newList})
+
         })
     }
    
        // alert ("delete student")
     }
+    //edit student lorsqu'on clique sur btn update icon
+    EditStudent = (UpdatedStudent)=>{
+       // alert("edit")
+       //console.log(UpdatedStudent)
+       //changer le text du button newStudent
+       this.setState({textBtnState:"Edit Student"})
+       //changer icon
+       this.setState({iconBtnState:"fas fa-edit"})
+       //ajouter les informations au state
+       this.setState({
+           nom:UpdatedStudent.nom,
+           pren:UpdatedStudent.pren,
+           email:UpdatedStudent.email,
+           avatar:UpdatedStudent.avatar,
+           updatedsdstudent_id:UpdatedStudent.id
+       })
+    //changer l'action state
+    this.setState({action:"EDIT"})
+    }
+    //submitted editstudent student va changer depuis firebase
+    submitEditStudent = (event) =>{
+        event.preventDefault();
+        //alert(1)
+        //partie data a envoyer a database
+        const student_data={
+            nom:this.state.nom,
+            pren:this.state.pren,
+            email:this.state.email,
+            avatar:this.state.avatar
+        }
+        axios.put("students/"+this.state.updatedsdstudent_id +".json",student_data).then((responce)=>{
+            //console.log(responce)
+            //changer etudiant dans la liste
+            let newList = this.state.list_student_data;
+            newList.forEach((s) =>{
+                if (s.id == this.state.updatedsdstudent_id){
+                    s.nom = responce.data.nom;
+                    s.pren = responce.data.pren;
+                    s.email = responce.data.email;
+                    s.avatar = responce.data.avatar;
+                }
+            })
+            //modifier la liste
+            this.setState({list_student_data:newList})
+            //modifier la liste backup
+            this.setState({backupList:newList})
+            //vider formulaire
+            event.target.reset();
+            //vider state
+            this.setState({
+                nom:"",
+                pren:"",
+                email:"",
+                avatar:"",
+                updatedsdstudent_id:-1,
+                textBtnState:"addstudent",
+                iconBtn:"fas fa-plus-circle",
+                action:"ADD"
+            })
+        })
+
+
+    }
+    searchStudent = (event)=>{
+        //concerver notre liste
+       // this.setState({backupList:this.state.list_student_data})
+        
+       let query = event.target.value.toLowerCase();
+       
+        //changer la liste
+        if(query == ""){
+            this.setState({list_student_data:this.state.backupList})
+        }else{
+            let newList = this.state.list_student_data.filter(s=>
+                s.nom.toLowerCase().includes(query)||
+                s.pren.toLowerCase().includes(query)
+                );
+
+        
+        this.setState({list_student_data:newList})
+            }
+
+        //console.log(event.target.value)
+        
+    }
+    
 
 
 }
