@@ -365,6 +365,7 @@ class Home extends React.Component {
            avatar:this.state.moreInfo.avatar,
            isPresent:!this.state.moreInfo.isPresent
        }
+       //jghjg
          axios.put("students/" + this.state.moreInfo.id + ".json", data_student )
         //     //console.log(responce)
         //     //changer etudiant dans la liste
