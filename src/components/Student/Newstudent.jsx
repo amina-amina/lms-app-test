@@ -2,8 +2,20 @@ import React from 'react'
 
 export default function Newstudent(props) {
     return (
+        <>
+        
         
             <div className="col-4 border p-5">
+            <div className="text-center ">
+        <button 
+        type="button" 
+        className=
+        {props.cancelEdit == true ? "btn btn-danger rounded-circle" : "d-none"}
+        onClick ={props.cancel}
+        >
+            <span width="50" height="50" aria-hidden="true" className=" ">×</span>
+          </button>
+    </div>
                 <div className="avatar border mx-auto mt-5 " 
                     style ={{backgroundImage:`url(${props.avatar||'https://i.stack.imgur.com/l60Hf.png'})`}}
                 />
@@ -55,6 +67,7 @@ export default function Newstudent(props) {
                     </div>
                 </form>
             </div>
+            </>
         
 
     )

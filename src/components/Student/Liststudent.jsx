@@ -22,6 +22,7 @@ export default function Liststudent(props) {
                 data={s}
                 handleDelete={props.handleDeleteStudent}
                 handleEdit={props.handleEditStudent}
+                handleView={props.handleViewStudent}
                 
 
 

@@ -23,7 +23,11 @@ export default function Student(props) {
           </div>
 
           <div className="d-flex flex-column ">
-            <button className="mz-1 btn btn-info m-1">
+            <button onClick={()=>props.handleView(props.data)} 
+            className="mz-1 btn btn-info m-1"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            >
               <i className="fas fa-eye" />
             </button>
             <button onClick={()=>props.handleEdit(props.data)}   className="mz-1 btn btn-warning m-1">
